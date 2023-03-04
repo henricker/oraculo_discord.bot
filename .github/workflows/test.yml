@@ -1,0 +1,23 @@
+name: Tests
+on:
+  pull_request:
+    branches: ['main', 'develop']
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.15.x]
+
+    steps:
+      - name: Clone Repository
+        uses: actions/checkout@v2
+      - name: Use Node.JS ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
+      - name: Install dependencies
+        run: yarn install
+      - name: Running tests
+        run: yarn test

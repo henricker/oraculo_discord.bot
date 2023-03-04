@@ -1,6 +1,11 @@
 import 'dotenv/config'
 import { Configuration, OpenAIApi } from 'openai'
-import { Client as ClientDiscord, GatewayIntentBits, TextChannel } from 'discord.js'
+import { Client as ClientDiscord, GatewayIntentBits } from 'discord.js'
+import { DiscordAdapter } from './infra/services/OutputService/DiscordAdapter'
+import { OpenIAAdapter } from './infra/services/IAService/OpenAIAdapter'
+import { ConsoleAdapter } from './infra/services/LogService/ConsoleAdapter'
+import { answerQuestionFactory } from './factories/answerQuestionFactory'
+import { ChannelController } from './presentation/ChannelController'
 
 
 (async () => {
@@ -15,48 +20,22 @@ import { Client as ClientDiscord, GatewayIntentBits, TextChannel } from 'discord
     })
 
     discord.on('ready', (discord) => {
+        const outputService = new DiscordAdapter(discord)
+        const iaService = new OpenIAAdapter(openai)
+        const loggerService = new ConsoleAdapter()
+
+        const answerQuestion = answerQuestionFactory(outputService, iaService, loggerService)
+        const channelController = new ChannelController(answerQuestion, loggerService, outputService)
+
         discord.on('messageCreate', async (message) => {
             try {
-                const channelName = message.channel.toJSON() as { name: string }
-    
-                if(channelName.name !== process.env.DISCORD_CHANNEL_NAME) {
+                if(message.channel.id !== process.env.DISCORD_CHANNEL_ID || message.author.bot) {
                     return
                 }
-                
-                const channel = message.channel as TextChannel
-        
-                if(message.author.bot) {
-                    return;
-                }
-    
-                if(!message.content.match(/^\$question:.*$/)) {
-                    await channel.send('Para realizar uma pergunta, utilize o comando: ```$question: <pergunta>```')
-                    return;
-                }
-    
-                const question = message.content.replace(/^\$question:/, '').trim()
-    
-                const completion = await openai.createChatCompletion({
-                    messages: [{
-                        role: 'user',
-                        content: question
-                    }],
-                    model: 'gpt-3.5-turbo'
-                })
-
-                if((completion.data.choices[0].message?.content as string)?.length > 2000) {
-                    await message.reply({
-                        files: [{
-                            name: 'answer.txt',
-                            attachment: Buffer.from(completion.data.choices[0].message?.content as string)
-                        }]
-                    })
-                    return
-                }
-    
-                await message.reply(completion.data.choices[0].message?.content as string)
+                const content = message.content.trim()
+                await channelController.handle(content)
             } catch(err) {
-                console.log(err)
+                loggerService.log(err, 'error')
                 message.reply("Ops, ocorreu um erro ao tentar responder sua pergunta. Tente novamente mais tarde.")
             }
 
