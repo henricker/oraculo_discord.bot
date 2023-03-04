@@ -43,9 +43,20 @@ import { Client as ClientDiscord, GatewayIntentBits, TextChannel } from 'discord
                     }],
                     model: 'gpt-3.5-turbo'
                 })
+
+                if((completion.data.choices[0].message?.content as string)?.length > 2000) {
+                    await message.reply({
+                        files: [{
+                            name: 'answer.txt',
+                            attachment: Buffer.from(completion.data.choices[0].message?.content as string)
+                        }]
+                    })
+                    return
+                }
     
                 await message.reply(completion.data.choices[0].message?.content as string)
             } catch(err) {
+                console.log(err)
                 message.reply("Ops, ocorreu um erro ao tentar responder sua pergunta. Tente novamente mais tarde.")
             }
 
