@@ -1,4 +1,4 @@
 
 export interface IOutputService {
-    sendOutput(text: string): Promise<void>;
+    sendOutput(text: string, messageId: string): Promise<void>;
 }

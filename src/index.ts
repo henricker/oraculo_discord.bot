@@ -33,7 +33,7 @@ import { ChannelController } from './presentation/ChannelController'
                     return
                 }
                 const content = message.content.trim()
-                await channelController.handle(content)
+                await channelController.handle(content, message.id)
             } catch(err) {
                 loggerService.log(err, 'error')
                 message.reply("Ops, ocorreu um erro ao tentar responder sua pergunta. Tente novamente mais tarde.")
