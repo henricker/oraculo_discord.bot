@@ -27,7 +27,7 @@ describe('#Presentation - ChannelController', () => {
             const { sut, outputService} = makeSut()
             const spy = jest.spyOn(outputService, 'sendOutput')
             await sut['checkCodeMessage']('any_message')
-            expect(spy).toHaveBeenCalledWith(`Invalid message format, send a message with the following format: ${process.env.CODE_DELIMITTER}<code> <message>`)
+            expect(spy).toHaveBeenCalledWith(`Formato da mensagem inválida, envie no seguinte formato: ${process.env.CODE_DELIMITTER}<code> <message>`)
         })
 
         it('Should return void when message does not contains code delimitter', async () => {
@@ -55,7 +55,7 @@ describe('#Presentation - ChannelController', () => {
             const { sut, outputService } = makeSut()
             const spy = jest.spyOn(outputService, 'sendOutput')
             await sut['selectUseCaseByCode']('any_code', 'any_message')
-            expect(spy).toHaveBeenCalledWith('Invalid code')
+            expect(spy).toHaveBeenCalledWith('Comando inválido')
         })
     })
 

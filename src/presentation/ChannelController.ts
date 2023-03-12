@@ -23,7 +23,7 @@ export class ChannelController {
 
     private async checkCodeMessage(text: string): Promise<{ message: string; code: string; } | void> {
         if(!text.includes(process.env.CODE_DELIMITTER as string)) {
-            await this.outputService.sendOutput(`Invalid message format, send a message with the following format: ${process.env.CODE_DELIMITTER}<code> <message>`)
+            await this.outputService.sendOutput(`Formato da mensagem inválida, envie no seguinte formato: ${process.env.CODE_DELIMITTER}<code> <message>`)
             return void 0
         }
 
@@ -40,7 +40,7 @@ export class ChannelController {
                 await this.answerQuestionUseCase.execute(message)
                 break
             default:
-                await this.outputService.sendOutput('Invalid code')
+                await this.outputService.sendOutput('Comando inválido')
                 break
         }
     }
