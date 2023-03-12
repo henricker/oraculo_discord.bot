@@ -9,10 +9,10 @@ export class AnswerQuestionUseCase {
         private readonly loggerService: ILoggerService
     ) {}
 
-    async execute(question: string): Promise<void> {
+    async execute(question: string, messageId: string): Promise<void> {
         try {
             const answer = await this.iaService.answerQuestion(question)
-            await this.outputService.sendOutput(answer)
+            await this.outputService.sendOutput(answer, messageId)
         } catch(err) {
             await this.loggerService.log(err, 'error')
         }

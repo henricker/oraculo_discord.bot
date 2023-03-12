@@ -7,14 +7,12 @@ export class DiscordAdapter implements IOutputService {
         private readonly discordClient: Client
     ) {}
 
-    async sendOutput(text: string): Promise<void> {
+    async sendOutput(text: string, messageId: string): Promise<void> {
         const channel = await this.discordClient.channels.fetch(
             process.env.DISCORD_CHANNEL_ID as string
         ) as TextChannel
 
-        const message = (await channel.messages.fetch({
-            limit: 1
-        })).first()
+        const message = await channel.messages.fetch(messageId)
 
         if(text.length > 2000) {
             await message?.reply({
