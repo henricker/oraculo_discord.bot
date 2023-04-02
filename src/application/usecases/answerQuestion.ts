@@ -13,8 +13,8 @@ export class AnswerQuestionUseCase {
         try {
             const answer = await this.iaService.answerQuestion(question)
             await this.outputService.sendOutput(answer, messageId)
-        } catch(err) {
-            await this.loggerService.log(err, 'error')
+        } catch(err: any) {
+            await this.loggerService.log(err.response.data, 'error')
         }
     }
 }
