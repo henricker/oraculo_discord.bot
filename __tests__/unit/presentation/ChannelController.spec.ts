@@ -44,14 +44,14 @@ describe('#Presentation - ChannelController', () => {
     })
 
     describe('#selectUseCaseByCode', () => {
-        it('Should calls AnswerQuestionUseCase with correct message when code is question', async () => {
+        it('Should calls answerQuestionUseCase with correct message when code is q', async () => {
             const { sut, answerQuestionUseCase } = makeSut()
             const spy = jest.spyOn(answerQuestionUseCase, 'execute')
-            await sut['selectUseCaseByCode']('question', 'any_message', 'any_message_id')
+            await sut['selectUseCaseByCode']('q', 'any_message', 'any_message_id')
             expect(spy).toHaveBeenCalledWith('any_message', 'any_message_id')
         })
 
-        it('Should calls OutputService with correct message when code is not question', async () => {
+        it('Should calls OutputService with correct message when code is not q', async () => {
             const { sut, outputService } = makeSut()
             const spy = jest.spyOn(outputService, 'sendOutput')
             await sut['selectUseCaseByCode']('any_code', 'any_message', 'any_message_id')
