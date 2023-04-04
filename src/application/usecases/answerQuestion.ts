@@ -14,7 +14,7 @@ export class AnswerQuestionUseCase {
             const answer = await this.iaService.answerQuestion(question)
             await this.outputService.sendOutput(answer, messageId)
         } catch(err: any) {
-            await this.loggerService.log(err.response.data, 'error')
+            await this.loggerService.log(err, 'error')
         }
     }
 }
