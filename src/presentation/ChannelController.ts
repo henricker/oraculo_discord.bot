@@ -36,7 +36,7 @@ export class ChannelController {
 
     private async selectUseCaseByCode(code: string, message: string, messageId: string): Promise<void> {
         switch(code) {
-            case 'question':
+            case 'q':
                 await this.answerQuestionUseCase.execute(message, messageId)
                 break
             default:
