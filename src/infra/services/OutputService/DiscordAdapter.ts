@@ -1,19 +1,16 @@
 import { Client, TextChannel } from "discord.js";
 import { IOutputService } from "../../../application/services/OutputService";
 
-
+const CHANNEL_NAME = 'oráculo'
 export class DiscordAdapter implements IOutputService {
     constructor(
         private readonly discordClient: Client
     ) {}
 
-    async sendOutput(text: string, messageId: string): Promise<void> {
-        const channel = await this.discordClient.channels.fetch(
-            process.env.DISCORD_CHANNEL_ID as string
-        ) as TextChannel
-
-        const message = await channel.messages.fetch(messageId)
-
+    async sendOutput(text: string, messageId: string, guildid: string): Promise<void> {
+        const guild = await this.discordClient.guilds.fetch(guildid)
+        const channelByGuild = guild.channels.cache.find(channel => channel.name === CHANNEL_NAME) as TextChannel
+        const message = await channelByGuild?.messages.fetch(messageId)
         if(text.length > 2000) {
             await message?.reply({
                 files: [{

@@ -10,20 +10,20 @@ export class ChannelController {
         private readonly outputService: IOutputService
     ) {}
 
-    public async handle(text: string, messageId: string): Promise<void> {
+    public async handle(text: string, messageId: string, guildId: string): Promise<void> {
         try {
-            const codeMessage = await this.checkCodeMessage(text, messageId)
+            const codeMessage = await this.checkCodeMessage(text, messageId, guildId)
             if(!codeMessage) return
     
-            await this.selectUseCaseByCode(codeMessage.code, codeMessage.message, messageId)
+            await this.selectUseCaseByCode(codeMessage.code, codeMessage.message, messageId, guildId)
         } catch (error) {
             await this.loggerService.log(error, 'error')
         }
     }
 
-    private async checkCodeMessage(text: string, messageId: string): Promise<{ message: string; code: string; } | void> {
+    private async checkCodeMessage(text: string, messageId: string, guildId: string): Promise<{ message: string; code: string; } | void> {
         if(!text.includes(process.env.CODE_DELIMITTER as string)) {
-            await this.outputService.sendOutput(`Formato da mensagem inválida, envie no seguinte formato: ${process.env.CODE_DELIMITTER}<code> <message>`, messageId)
+            await this.outputService.sendOutput(`Formato da mensagem inválida, envie no seguinte formato: ${process.env.CODE_DELIMITTER}<code> <message>`, messageId, guildId)
             return void 0
         }
 
@@ -34,13 +34,13 @@ export class ChannelController {
         return { message, code }
     }
 
-    private async selectUseCaseByCode(code: string, message: string, messageId: string): Promise<void> {
+    private async selectUseCaseByCode(code: string, message: string, messageId: string, guildId: string): Promise<void> {
         switch(code) {
             case 'q':
-                await this.answerQuestionUseCase.execute(message, messageId)
+                await this.answerQuestionUseCase.execute(message, messageId, guildId)
                 break
             default:
-                await this.outputService.sendOutput('Comando inválido', messageId)
+                await this.outputService.sendOutput('Comando inválido', messageId, guildId)
                 break
         }
     }
