@@ -1,17 +1,17 @@
 import { describe, it } from '@jest/globals';
 import { AnswerQuestionUseCase } from '../../../src/application/usecases/answerQuestion';
 import { ChannelController } from '../../../src/presentation/ChannelController';
-import { MockIAService } from '../mocks/IAServiceMock';
 import { MockLoggerService } from '../mocks/LoggerServiceMock';
 import { MockOutputService } from '../mocks/OutputServiceMock';
+import { MockRequestQueue } from '../mocks/MockRequestQueue';
 
 const makeSut = () => {
     const outputService = new MockOutputService()
     const loggerService = new MockLoggerService()
+    const requestQueue = new MockRequestQueue()
     const answerQuestionUseCase = new AnswerQuestionUseCase(
-        outputService,
-        new MockIAService(),
-        loggerService
+        loggerService,
+        requestQueue
     )
 
     const sut = new ChannelController(answerQuestionUseCase, loggerService, outputService)

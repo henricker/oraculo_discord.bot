@@ -1,30 +1,25 @@
 import 'dotenv/config'
-import { Configuration, OpenAIApi } from 'openai'
 import { ChannelType, Client as ClientDiscord, GatewayIntentBits, TextChannel } from 'discord.js'
 import { DiscordAdapter } from './infra/services/OutputService/DiscordAdapter'
-import { OpenIAAdapter } from './infra/services/IAService/OpenAIAdapter'
 import { ConsoleAdapter } from './infra/services/LogService/ConsoleAdapter'
 import { answerQuestionFactory } from './factories/answerQuestionFactory'
 import { ChannelController } from './presentation/ChannelController'
+import { fork } from 'child_process'
+import path from 'path'
+import { RedisQueueRequestAdapter } from './infra/services/RequestQueue/RedisQueueRequestAdapter'
 
 
 (async () => {
-    const configuration = new Configuration({
-        apiKey: process.env.OPEN_IA_API_KEY
-    })
-    
-    const openai = new OpenAIApi(configuration)
-
     const discord =  new ClientDiscord({
         intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent]
     })
 
     discord.on('ready', (discord) => {
-        const outputService = new DiscordAdapter(discord)
-        const iaService = new OpenIAAdapter(openai)
+        const childProcess = fork(path.resolve(__dirname, 'background-workers'))
         const loggerService = new ConsoleAdapter()
-
-        const answerQuestion = answerQuestionFactory(outputService, iaService, loggerService)
+        const requestQueue = new RedisQueueRequestAdapter()
+        const outputService = new DiscordAdapter(discord)
+        const answerQuestion = answerQuestionFactory(requestQueue, loggerService)
         const channelController = new ChannelController(answerQuestion, loggerService, outputService)
 
         discord.on('guildCreate', async (guild) => {
@@ -53,6 +48,12 @@ import { ChannelController } from './presentation/ChannelController'
                 message.reply("Ops, ocorreu um erro ao tentar responder sua pergunta. Tente novamente mais tarde.")
             }
 
+        })
+
+        childProcess.on('message', async (message: any) => {
+            if(message.code === 'request-open-ia') {
+                await outputService.sendOutput(message.data.answer, message.data.messageId, message.data.guildId)
+            }
         })
     })
     discord.login(process.env.DISCORD_TOKEN)

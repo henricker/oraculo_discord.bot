@@ -1,18 +1,15 @@
-import { IAService } from "../services/IAService"
 import { ILoggerService } from "../services/LoggerService"
-import { IOutputService } from "../services/OutputService"
+import { IRequestQueue } from "../services/RequestQueue"
 
 export class AnswerQuestionUseCase {
     constructor(
-        private readonly outputService: IOutputService,
-        private readonly iaService: IAService,
-        private readonly loggerService: ILoggerService
+        private readonly loggerService: ILoggerService,
+        private readonly requestQueue: IRequestQueue
     ) {}
 
     async execute(question: string, messageId: string, guildId: string): Promise<void> {
         try {
-            const answer = await this.iaService.answerQuestion(question)
-            await this.outputService.sendOutput(answer, messageId, guildId)
+            await this.requestQueue.add({ question, messageId, guildId })
         } catch(err: any) {
             await this.loggerService.log(err, 'error')
         }

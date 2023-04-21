@@ -1,4 +1,4 @@
-import { Configuration, OpenAIApi } from 'openai'
+import { OpenAIApi } from 'openai'
 import { IAService } from "../../../application/services/IAService";
 
 export class OpenIAAdapter implements IAService {
