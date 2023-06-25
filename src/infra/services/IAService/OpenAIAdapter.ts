@@ -1,5 +1,5 @@
+import { IAService } from '@usecases/services/IAService'
 import { OpenAIApi } from 'openai'
-import { IAService } from '../../../usecases/services/IAService'
 
 export class OpenIAAdapter implements IAService {
   constructor(private readonly openIAClient: OpenAIApi) {}
