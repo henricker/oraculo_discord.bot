@@ -1,4 +1,3 @@
-
 export enum EChannelType {
-    GuildText = 0,
+  GuildText = 0,
 }

@@ -1,4 +1,3 @@
-
 export interface IAService {
-    answerQuestion(question: string): Promise<string>;
+  answerQuestion(question: string): Promise<string>
 }
