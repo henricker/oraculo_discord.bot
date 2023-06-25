@@ -8,8 +8,8 @@
   },
   "scripts": {
     "lint": "eslint --fix **/*.ts",
-    "prod": "NODE_ENV=prod ts-node -r tsconfig-paths/register src/index.ts",
-    "dev": "NODE_ENV=dev ts-node -r tsconfig-paths/register src/index.ts",
+    "prod": "NODE_ENV=prod ts-node src/index.ts",
+    "dev": "NODE_ENV=dev ts-node src/index.ts",
     "build": "tsc",
     "start": "node dist/src/index.js",
     "test": "jest"

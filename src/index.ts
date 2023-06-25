@@ -1,3 +1,4 @@
+import './register'
 import { IMessage } from '@domain/IMessage'
 import { handleCommandsUseCaseFactory } from '@factories/HandleCommandsUseCaseFactory'
 import { OnJoinGuildUseCaseFactory } from '@factories/OnJoinGuildUseCaseFactory'
