@@ -1,4 +1,4 @@
-import { ILoggerService } from "../../../application/services/LoggerService";
+import { ILoggerService } from "../../../usecases/services/LoggerService";
 
 
 export class ConsoleAdapter implements ILoggerService {

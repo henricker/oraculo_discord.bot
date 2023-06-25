@@ -1,3 +1,6 @@
 node_modules
 .env
+.env.dev
 dist
+oraculo_discord_bot.zip
+coverage
