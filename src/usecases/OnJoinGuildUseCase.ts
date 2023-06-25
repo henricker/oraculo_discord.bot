@@ -1,13 +1,13 @@
+import { IGuild } from '@domain/IGuild'
+import { IUseCase } from '@shared/protocols/IUseCase'
+import { EChannelType } from '@domain/constants/EChannelTypeEnum'
 import { ILoggerService } from './services/LoggerService'
-import { IUseCase } from '../domain/IUseCase'
-import { IGuild } from '../domain/IGuild'
-import { EChannelType } from '../domain/constants/EChannelTypeEnum'
 
 type Input = IGuild
 export class OnJoinGuildUseCase implements IUseCase<Input, void> {
   constructor(private readonly loggerService: ILoggerService) {}
 
-  private readonly welcomeGuildMessage =
+  public readonly welcomeGuildMessage =
     'Olá, eu sou o Oráculo, e estou aqui para te ajudar a encontrar respostas para suas perguntas. Para começar, basta me enviar uma pergunta e eu irei tentar responder da melhor forma possível. :smile:'
 
   async execute(input: Input): Promise<void> {

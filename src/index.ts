@@ -1,11 +1,11 @@
+import { IMessage } from '@domain/IMessage'
+import { handleCommandsUseCaseFactory } from '@factories/HandleCommandsUseCaseFactory'
+import { OnJoinGuildUseCaseFactory } from '@factories/OnJoinGuildUseCaseFactory'
+import { answerQuestionUseCaseFactory } from '@factories/answerQuestionUseCaseFactory'
+import { loadVarsByEnv } from '@shared/util/loadVariablesByEnv'
 import { Client as ClientDiscord, GatewayIntentBits } from 'discord.js'
 import dotenv from 'dotenv'
 import path from 'path'
-import { answerQuestionUseCaseFactory } from './factories/answerQuestionUseCaseFactory'
-import { OnJoinGuildUseCaseFactory } from './factories/OnJoinGuildUseCaseFactory'
-import { handleCommandsUseCaseFactory } from './factories/HandleCommandsUseCaseFactory'
-import { loadVarsByEnv } from './shared/util/loadVariablesByEnv'
-import { IMessage } from './domain/IMessage'
 
 dotenv.config({
   path: path.resolve(

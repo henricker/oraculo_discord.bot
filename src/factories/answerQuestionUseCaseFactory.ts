@@ -1,7 +1,7 @@
+import { OpenIAAdapter } from '@infra/services/IAService/OpenAIAdapter'
+import { ConsoleAdapter } from '@infra/services/LogService/ConsoleAdapter'
+import { AnswerQuestionUseCase } from '@usecases/answerQuestionUseCase'
 import { Configuration, OpenAIApi } from 'openai'
-import { AnswerQuestionUseCase } from '../usecases/answerQuestionUseCase'
-import { OpenIAAdapter } from '../infra/services/IAService/OpenAIAdapter'
-import { ConsoleAdapter } from '../infra/services/LogService/ConsoleAdapter'
 
 export const answerQuestionUseCaseFactory = () => {
   const configuration = new Configuration({

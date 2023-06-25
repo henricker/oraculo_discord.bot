@@ -1,6 +1,6 @@
+import { IMessage } from '@domain/IMessage'
+import { IUseCase } from '@shared/protocols/IUseCase'
 import { ILoggerService } from './services/LoggerService'
-import { IUseCase } from '../domain/IUseCase'
-import { IMessage } from '../domain/IMessage'
 
 type Input = IMessage
 type CommandCode = 'q' | 'exit'
@@ -15,7 +15,7 @@ export class HandleCommandsUseCase implements IUseCase<Input, Output> {
   private readonly codeDelimiter = process.env.CODE_DELIMITTER as string
   private readonly oraculoTextChannel = process.env
     .TEXT_CHANNEL_ORACULO as string
-  private readonly invalidMessageFormat = `Formato da mensagem inválida, envie no seguinte formato: ${process.env.CODE_DELIMITTER}<code> <message>`
+  public readonly invalidMessageFormat = `Formato da mensagem inválida, envie no seguinte formato: ${process.env.CODE_DELIMITTER}<code> <message>`
 
   async execute(input: Input): Promise<Output> {
     try {

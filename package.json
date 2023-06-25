@@ -8,8 +8,8 @@
   },
   "scripts": {
     "lint": "eslint --fix **/*.ts",
-    "prod": "NODE_ENV=prod ts-node src/index.ts",
-    "dev": "NODE_ENV=dev ts-node src/index.ts",
+    "prod": "NODE_ENV=prod ts-node -r tsconfig-paths/register src/index.ts",
+    "dev": "NODE_ENV=dev ts-node -r tsconfig-paths/register src/index.ts",
     "build": "tsc",
     "start": "node dist/src/index.js",
     "test": "jest"
@@ -30,6 +30,7 @@
     "prettier": "^2.4.1",
     "ts-jest": "^29.0.5",
     "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^4.9.5"
   },
   "dependencies": {

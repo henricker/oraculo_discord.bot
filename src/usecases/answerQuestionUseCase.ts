@@ -1,5 +1,5 @@
-import { IMessage } from '../domain/IMessage'
-import { IUseCase } from '../domain/IUseCase'
+import { IMessage } from '@domain/IMessage'
+import { IUseCase } from '@shared/protocols/IUseCase'
 import { IAService } from './services/IAService'
 import { ILoggerService } from './services/LoggerService'
 

@@ -1,4 +1,4 @@
-import { ILoggerService } from '../../../usecases/services/LoggerService'
+import { ILoggerService } from '@usecases/services/LoggerService'
 
 export class ConsoleAdapter implements ILoggerService {
   async log(log: any, type: 'error' | 'info' | 'warn'): Promise<void> {
