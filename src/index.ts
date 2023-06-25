@@ -1,21 +1,13 @@
 import './register'
+import './env'
 import { IMessage } from '@domain/IMessage'
 import { handleCommandsUseCaseFactory } from '@factories/HandleCommandsUseCaseFactory'
 import { OnJoinGuildUseCaseFactory } from '@factories/OnJoinGuildUseCaseFactory'
 import { answerQuestionUseCaseFactory } from '@factories/answerQuestionUseCaseFactory'
-import { loadVarsByEnv } from '@shared/util/loadVariablesByEnv'
 import { Client as ClientDiscord, GatewayIntentBits } from 'discord.js'
-import dotenv from 'dotenv'
-import path from 'path'
 
-dotenv.config({
-  path: path.resolve(
-    __dirname,
-    '..',
-    loadVarsByEnv(process.env.NODE_ENV as string)
-  ),
-}) as any
-;(async () => {
+function bootstrap() {
+  console.log(process.env)
   const discord = new ClientDiscord({
     intents: [
       GatewayIntentBits.Guilds,
@@ -60,4 +52,6 @@ dotenv.config({
     })
   })
   discord.login(process.env.DISCORD_TOKEN)
-})()
+}
+
+bootstrap()

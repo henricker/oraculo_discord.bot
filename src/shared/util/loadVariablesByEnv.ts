@@ -1,3 +1,3 @@
 export function loadVarsByEnv(env?: string) {
-  return env === 'prod' || !env ? '.env' : '.env.dev'
+  return env === 'production' ? '.env' : '.env.dev'
 }
