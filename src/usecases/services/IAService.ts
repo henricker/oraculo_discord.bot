@@ -1,3 +1,3 @@
 export interface IAService {
-  answerQuestion(question: string): Promise<string>
+  answerQuestion(history: { role: string; content: string }[]): Promise<string>
 }

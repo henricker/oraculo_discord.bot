@@ -1,20 +1,29 @@
 import { describe, it } from '@jest/globals'
-import { AnswerQuestionUseCase } from '@usecases/answerQuestionUseCase'
+import { AnswerQuestionUseCase } from '@usecases/AnswerQuestionUseCase'
 import { IMessage } from '@domain/IMessage'
 import { MockIAService } from '../mocks/IAServiceMock'
 import { MockLoggerService } from '../mocks/LoggerServiceMock'
+import { MockMessageHistory } from '../mocks/MessageHistoryMock'
 
 const makeSut = () => {
   const iaService = new MockIAService()
   const loggerService = new MockLoggerService()
-  const sut = new AnswerQuestionUseCase(iaService, loggerService)
+  const historyMessageService = new MockMessageHistory()
+  const sut = new AnswerQuestionUseCase(
+    iaService,
+    loggerService,
+    historyMessageService
+  )
 
-  return { sut, iaService, loggerService }
+  return { sut, iaService, loggerService, historyMessageService }
 }
 
 describe('#UseCase - AnswerQuestionUseCase', () => {
   const defaultParams = {
     message: {
+      guild: {
+        id: 'mocked guild id',
+      },
       reply: jest.fn(),
     } as unknown as IMessage,
     question: 'this is a question?',
@@ -29,10 +38,18 @@ describe('#UseCase - AnswerQuestionUseCase', () => {
   })
 
   it('Should call iaService with correct question', async () => {
-    const { iaService, sut } = makeSut()
+    const { iaService, sut, historyMessageService } = makeSut()
     const spy = jest.spyOn(iaService, 'answerQuestion')
+    jest.spyOn(historyMessageService, 'getMessages').mockResolvedValueOnce([
+      {
+        role: 'user',
+        content: defaultParams.question,
+      },
+    ])
     await sut.execute(defaultParams)
-    expect(spy).toHaveBeenCalledWith(defaultParams.question)
+    expect(spy).toHaveBeenCalledWith([
+      { content: 'this is a question?', role: 'user' },
+    ])
   })
 
   it('Should reply message on success', async () => {
