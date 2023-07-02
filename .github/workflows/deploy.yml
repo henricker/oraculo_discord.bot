@@ -1,0 +1,43 @@
+name: Deploy
+on:
+  push:
+    branches: ['main']
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.15.x]
+    steps:
+      - name: Cache Yarn packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/yarn
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Clone Repository
+        uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Create .env file
+        run: |
+          if [ ! -f .env ]; then
+            echo "CODE_DELIMITTER=${{ secrets.CODE_DELIMITTER }}" > .env
+            echo "DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}" >> .env
+            echo "OPEN_IA_API_KEY=${{ secrets.OPEN_IA_API_KEY }}" >> .env
+            echo "TEXT_CHANNEL_ORACULO=${{ secrets.TEXT_CHANNEL_ORACULO }}" >> .env
+          fi
+      - name: Zip repository
+        run: |
+          zip -r oraculo_discord.zip . -x ".git*"
+      - name: Deploy to Platform
+        run: |
+          curl -X POST \
+            -H "Authorization: ${{ secrets.SQUARE_CLOUD_AUTHORIZATION_KEY }}" \
+            -H "Content-Type: multipart/form-data" \
+            -F "file=@oraculo_discord.zip" \
+            "https://api.squarecloud.app/v2/apps/${{ secrets.SQUARE_CLOUD_APP_ID }}/commit?restart=true"
