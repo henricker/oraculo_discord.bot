@@ -1,6 +1,7 @@
+import memoryAdapter from '@infra/services/HistoryMessageByGuildService/MemoryAdapter'
 import { OpenIAAdapter } from '@infra/services/IAService/OpenAIAdapter'
 import { ConsoleAdapter } from '@infra/services/LogService/ConsoleAdapter'
-import { AnswerQuestionUseCase } from '@usecases/answerQuestionUseCase'
+import { AnswerQuestionUseCase } from '@usecases/AnswerQuestionUseCase'
 import { Configuration, OpenAIApi } from 'openai'
 
 export const answerQuestionUseCaseFactory = () => {
@@ -10,5 +11,5 @@ export const answerQuestionUseCaseFactory = () => {
   const openai = new OpenAIApi(configuration)
   const iaService = new OpenIAAdapter(openai)
   const loggerService = new ConsoleAdapter()
-  return new AnswerQuestionUseCase(iaService, loggerService)
+  return new AnswerQuestionUseCase(iaService, loggerService, memoryAdapter)
 }

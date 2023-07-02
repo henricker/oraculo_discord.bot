@@ -3,7 +3,7 @@ import { IUseCase } from '@shared/protocols/IUseCase'
 import { ILoggerService } from './services/LoggerService'
 
 type Input = IMessage
-type CommandCode = 'q' | 'exit'
+type CommandCode = 'q' | 'd' | 'exit' | 'commands'
 type Output = {
   commandCode: CommandCode
   textWithoutCommandCode?: string
