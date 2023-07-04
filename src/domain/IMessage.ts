@@ -8,5 +8,7 @@ export interface IMessage {
   }
   guild: IGuild
   content: string
-  reply: (message: string) => Promise<void>
+  reply: (
+    message: string | { files: { name: string; attachment: Buffer }[] }
+  ) => Promise<void>
 }

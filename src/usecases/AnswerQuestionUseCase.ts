@@ -28,6 +28,17 @@ export class AnswerQuestionUseCase implements IUseCase<Input, void> {
         role: 'assistant',
         content: answer,
       })
+      if (answer.length > 2000) {
+        await message.reply({
+          files: [
+            {
+              name: 'answer.txt',
+              attachment: Buffer.from(answer, 'utf-8'),
+            },
+          ],
+        })
+        return
+      }
       await message.reply(answer)
     } catch (err: any) {
       await this.loggerService.log(err, 'error')
