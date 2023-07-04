@@ -60,4 +60,22 @@ describe('#UseCase - AnswerQuestionUseCase', () => {
     await sut.execute(defaultParams)
     expect(spy).toHaveBeenCalledWith(answerMocked)
   })
+
+  it('Should reply message with file attachment if answer is greater than 2000', async () => {
+    const { iaService, sut } = makeSut()
+    const spy = jest.spyOn(defaultParams.message, 'reply')
+    const answerMocked = Array.from({ length: 2001 }, () => 'a')
+    jest
+      .spyOn(iaService, 'answerQuestion')
+      .mockResolvedValueOnce(answerMocked.join(''))
+    await sut.execute(defaultParams)
+    expect(spy).toHaveBeenCalledWith({
+      files: [
+        {
+          name: 'answer.txt',
+          attachment: Buffer.from(answerMocked.join('')),
+        },
+      ],
+    })
+  })
 })
