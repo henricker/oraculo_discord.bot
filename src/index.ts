@@ -49,7 +49,7 @@ function bootstrap() {
           case 'commands': {
             await message.reply(`
                🤖 - Comandos disponíveis:
-               $q: <sua pergunta> (envia a pergunta para o oráculo e ele response) 🗣
+               $q: <sua pergunta> (envia a pergunta para o oráculo e ele responde) 🗣
                $d: (deleta todas as mensagens do histórico de mensagens) ❌
                $commands: (Lista todos os comandos disponíveis) 📃
             `)
